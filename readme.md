@@ -18,23 +18,50 @@ When a Lambda starts, it unpacks an archive with a binary to the `/tmp` folder a
 
 ## Usage
 
+#### Using a path
+
 ```js
 const {getTextFromImage, isSupportedFile} = require('@shelf/aws-lambda-tesseract');
 
 module.exports.handler = async event => {
   // assuming there is a photo.jpg inside /tmp dir
-  // original file will be deleted afterwards
-
   if (!isSupportedFile('/tmp/photo.jpg')) {
     return false;
   }
 
-  return getTextFromImage('/tmp/photo.jpg');
+  getTextFromImage('/tmp/photo.jpg').then(result => console.log(result));
+};
+```
+
+#### Using a stream
+
+```js
+const {getTextFromImage, isSupportedFile} = require('@shelf/aws-lambda-tesseract');
+
+module.exports.handler = async event => {
+  // assuming that photo.jpg exists and is readable.
+  const file = fs.createReadStream(__dirname + '/photo.jpg');
+
+  if (!isSupportedFile('photo.jpg')) {
+    return false;
+  }
+
+  getTextFromImage(file).then(result => console.log(result));
 };
 ```
 
 `isSupportedFile` checks that file has image-like file extension and it's not in the list of
 unsupported by Tesseract file extensions.
+
+## Configuration
+
+These should only be overridden for local testing
+
+| Environment Variable    | Type   | Default                    |
+| ----------------------- | ------ | -------------------------- |
+| `TESSERACT_BINARY_PATH` | String | `/tmp/tesseract/tesseract` |
+| `LD_LIBRARY_PATH`       | String | `./lib`                    |
+| `TESSDATA_PREFIX`       | String | `./tessdata`               |
 
 ## Compile It Yourself
 
