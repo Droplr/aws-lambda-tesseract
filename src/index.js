@@ -13,12 +13,11 @@ async function runTesseract(file, opts) {
   let processFile = 'stdin';
   if (typeof file === 'string' && path.existsSync(file)) processFile = file;
   const options = {
-    input: processFile === 'stdin' ? file : null,
     env: {}
   };
   if (!process.env.TESSERACT_BINARY_PATH) {
-    options.env.LD_LIBRARY_PATH = process.env.LD_LIBRARY_PATH || './lib';
-    options.env.TESSDATA_PREFIX = process.env.TESSDATA_PREFIX || './tessdata';
+    options.env.LD_LIBRARY_PATH = process.env.LD_LIBRARY_PATH || `${outputPath}/lib`;
+    options.env.TESSDATA_PREFIX = process.env.TESSDATA_PREFIX || `${outputPath}/tessdata`;
     fs.readdir('/tmp/tesseract', (err, files) => {
       console.log('Tesseract Directory /tmp/tesseract', err, files);
     });
@@ -26,7 +25,7 @@ async function runTesseract(file, opts) {
       console.log('Tesseract Directory /tmp/tesseract/lib', err, files);
     });
   }
-
+  console.log('Running with options: ', options);
   if (!process.env.TESSERACT_BINARY_PATH) options.cwd = '/tmp/tesseract';
   return new Promise((resolve, reject) => {
     const child = execFile(ttBinary, [processFile, ...opts], options, (error, stdout, stderr) => {
