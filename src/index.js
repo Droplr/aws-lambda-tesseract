@@ -12,7 +12,8 @@ async function runTesseract(file, opts) {
   let processFile = 'stdin';
   if (typeof file === 'string' && path.existsSync(file)) processFile = file;
   const options = {
-    input: processFile === 'stdin' ? file : null
+    input: processFile === 'stdin' ? file : null,
+    env: {}
   };
   if (!process.env.TESSERACT_BINARY_PATH) {
     options.env.LD_LIBRARY_PATH = process.env.LD_LIBRARY_PATH || './lib';
