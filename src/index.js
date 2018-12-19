@@ -1,5 +1,6 @@
 const {execFile} = require('child_process');
 const path = require('path');
+const fs = require('fs');
 const isImage = require('is-image');
 const {unpack} = require('@shelf/aws-lambda-brotli-unpacker');
 
