@@ -16,7 +16,8 @@ async function runTesseract(file, opts) {
     env: {}
   };
   if (!process.env.TESSERACT_BINARY_PATH) {
-    options.env.LD_LIBRARY_PATH = process.env.LD_LIBRARY_PATH || `${outputPath}/lib`;
+    options.env.LD_LIBRARY_PATH =
+      `${process.env.LD_LIBRARY_PATH}:${outputPath}/lib` || `${outputPath}/lib`;
     options.env.TESSDATA_PREFIX = process.env.TESSDATA_PREFIX || `${outputPath}/tessdata`;
     fs.readdir('/tmp/tesseract', (err, files) => {
       console.log('Tesseract Directory /tmp/tesseract', err, files);
