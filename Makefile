@@ -9,8 +9,8 @@ build-docker:
 version:
 	@echo $(shell git rev-parse HEAD)
 
-build-tesseract: build-docker
+build-tesseract:
 	docker run -it -v $(PWD)/scripts:/scripts -v $(PWD)/build:/build $(NAME) scripts/compile-tesseract.sh
 
-compress-tesseract: build-docker
+compress-tesseract:
 	docker run -it -v $(PWD)/scripts:/scripts -v $(PWD)/build:/build $(NAME) scripts/compress-with-brotli.sh
