@@ -31,6 +31,7 @@ async function runTesseract(file, opts) {
   return new Promise((resolve, reject) => {
     const child = execFile(ttBinary, [processFile, ...opts], options, (error, stdout, stderr) => {
       if (error) return reject(error);
+      console.log('Got result: ', stdout.toString());
       return resolve(stdout);
     });
     if (processFile === 'stdin') file.pipe(child.stdin);
