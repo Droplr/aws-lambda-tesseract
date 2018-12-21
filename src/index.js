@@ -14,6 +14,8 @@ async function runTesseract(file, opts) {
   if (typeof file === 'string' && fs.existsSync(file)) processFile = file;
   if (!file) processFile = false;
 
+  console.log('Running with File', file);
+
   const options = {
     env: {}
   };
@@ -37,17 +39,6 @@ async function runTesseract(file, opts) {
       return resolve(stdout);
     });
     if (processFile === 'stdin') file.pipe(child.stdin);
-  });
-}
-
-var mkdirp = require('mkdirp');
-var getDirName = require('path').dirname;
-
-function writeFile(path, contents, cb) {
-  mkdirp(getDirName(path), function(err) {
-    if (err) return cb(err);
-
-    fs.writeFile(path, contents, cb);
   });
 }
 
