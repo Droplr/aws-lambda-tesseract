@@ -12,6 +12,8 @@ async function runTesseract(file, opts) {
   const ttBinary = process.env.TESSERACT_BINARY_PATH || (await unpack({inputPath, outputPath}));
   let processFile = 'stdin';
   if (typeof file === 'string' && fs.existsSync(file)) processFile = file;
+  if (!file) processFile = false;
+
   const options = {
     env: {}
   };
@@ -19,22 +21,33 @@ async function runTesseract(file, opts) {
     options.env.LD_LIBRARY_PATH =
       `${process.env.LD_LIBRARY_PATH}:/tmp/tesseract/lib` || `/tmp/tesseract/lib`;
     options.env.TESSDATA_PREFIX = process.env.TESSDATA_PREFIX || `/tmp/tesseract/tessdata`;
-    fs.readdir('/tmp/', (err, files) => {
-      console.log('Tesseract Directory /tmp/tesseract', err, files);
-    });
-    fs.readdir('/tmp/tesseract/lib', (err, files) => {
-      console.log('Tesseract Directory /tmp/tesseract/lib', err, files);
-    });
+    // fs.readdir('/tmp/', (err, files) => {
+    //   console.log('Tesseract Directory /tmp/tesseract', err, files);
+    // });
+    // fs.readdir('/tmp/tesseract/lib', (err, files) => {
+    //   console.log('Tesseract Directory /tmp/tesseract/lib', err, files);
+    // });
   }
-  console.log('Running with options: ', options);
+  console.log('Running with options: ', options, opts);
   if (!process.env.TESSERACT_BINARY_PATH) options.cwd = '/tmp/tesseract';
   return new Promise((resolve, reject) => {
-    const child = execFile(ttBinary, [processFile, ...opts], options, (error, stdout, stderr) => {
+    const finalOpts = processFile ? [processFile, ...opts] : opts;
+    const child = execFile(ttBinary, finalOpts, options, (error, stdout, stderr) => {
       if (error) return reject(error);
-      console.log('Got result: ', stdout.toString());
       return resolve(stdout);
     });
     if (processFile === 'stdin') file.pipe(child.stdin);
+  });
+}
+
+var mkdirp = require('mkdirp');
+var getDirName = require('path').dirname;
+
+function writeFile(path, contents, cb) {
+  mkdirp(getDirName(path), function(err) {
+    if (err) return cb(err);
+
+    fs.writeFile(path, contents, cb);
   });
 }
 
@@ -76,6 +89,11 @@ module.exports.getWordsAndBounds = async function(file) {
   const result = await runTesseract(file, ['stdout', '-l', 'eng', 'tsv']);
   const object = tsvJSON(result.toString());
   return object;
+};
+
+module.exports.version = async function() {
+  const result = await runTesseract(false, ['--version']);
+  return result.toString();
 };
 
 module.exports.isSupportedFile = function(filePath) {

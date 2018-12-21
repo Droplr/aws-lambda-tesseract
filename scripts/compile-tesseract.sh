@@ -38,11 +38,17 @@ cp /usr/lib64/libjpeg.so.62 lib/
 cp /usr/lib64/libwebp.so.4 lib/
 cp /usr/lib64/libstdc++.so.6 lib/
 cp /usr/lib64/libpng15.so.15 lib/
+cp /usr/lib64/libtiff.so.5 lib/
+cp /usr/lib64/libgomp.so.1 lib/
 
 # copy training data
 mkdir tessdata
 cd tessdata
 wget https://github.com/tesseract-ocr/tessdata_fast/raw/master/eng.traineddata
+
+# Create configs
+mkdir configs
+echo "tessedit_create_tsv 1" > configs/tsv
 
 # archive
 cd ~
