@@ -1,5 +1,5 @@
-#!/usr/bin/sh
-
+#!/usr/bin/env bash
+echo "Building"
 # Build leptonica
 wget http://www.leptonica.com/source/leptonica-1.77.0.tar.gz
 tar -zxvf leptonica-1.77.0.tar.gz
@@ -34,12 +34,14 @@ cp /usr/local/bin/tesseract .
 mkdir lib
 cp /usr/local/lib/libtesseract.so.4 lib/
 cp /usr/local/lib/liblept.so.5 lib/
+# cp /usr/lib64/* lib/
 cp /usr/lib64/libjpeg.so.62 lib/
 cp /usr/lib64/libwebp.so.4 lib/
 cp /usr/lib64/libstdc++.so.6 lib/
 cp /usr/lib64/libpng15.so.15 lib/
 cp /usr/lib64/libtiff.so.5 lib/
 cp /usr/lib64/libgomp.so.1 lib/
+cp /usr/lib64/libjbig.so.2.0 lib/
 
 # copy training data
 mkdir tessdata

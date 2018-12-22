@@ -14,8 +14,6 @@ async function runTesseract(file, opts) {
   if (typeof file === 'string' && fs.existsSync(file)) processFile = file;
   if (!file) processFile = false;
 
-  console.log('Running with File', file);
-
   const options = {
     env: {}
   };
