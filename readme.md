@@ -73,7 +73,7 @@ Compile Tesseract for deployment on Lambda. Requires [Docker](https://www.docker
 
 `$ make compress-tesseract`: Runs brotli compression on built Tesseract and compresses `tesseract.tar.gz` into `tt.tar.bz`.
 
-**Note:** After compressing you need to copy the latest `tt.tar.bz` into the `/bin` directory. `$ cp ./build/tt.tar.bz ./bin`
+**Note:** After compiling and compressing you need to copy the latest `tt.tar.bz` into the `/bin` directory. `$ cp ./build/tt.tar.bz ./bin`
 
 ## See Also
 
